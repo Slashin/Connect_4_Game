@@ -95,6 +95,9 @@ function drawWinningTokens (x,y) {
 		ctx.arc(x, y, circRadius, 0, Math.PI*2);
 		ctx.fillStyle = "#45ba41";
 		ctx.fill();
+		ctx.strokeStyle = "orange";
+		ctx.stroke();
+		ctx.lineWidth = 10
 		ctx.closePath();
 }
 
@@ -115,23 +118,48 @@ function drawTokens () {
 	}
 }
 
+function reloader () {
+	document.location.reload();
 
+}
+
+function display () {
+	if (checkResult == false) {
+		var TextCon = document.querySelector(".ResultDisplayer");
+		var Con = document.createElement("h1");
+		Con.id = "ResultText";
+		if (counter == 42) {
+			Con.textContent = "Draw!";
+		} else {
+			if (red == true) {
+				Con.textContent = "Red Player Wins!";
+			}else if (red == false) {
+				Con.textContent = "Yellow Player Wins!";
+			} 
+		
+	}
+	TextCon.appendChild(Con);
+	checkResult = true;
+	setTimeout(reloader, 1000);
+}
+}
 
 function mouseClickHandler (e) {
 	var clickX = e.clientX - canvas.offsetLeft;
 	var clickY = e.clientY - canvas.offsetTop;
 	for (var i = 1; i<8; i++) {
 			if (clickX >= grid[i][1].x && clickX <= grid[i][1].x + circRadius*2 && clickY >= grid[i][1].y && clickY <= grid[i][1].y + circRadius*2) {
+				counter++;
+				if(counter == 42) {
+					setTimeout(display, 500);
+				}
 				if (player == true) {
 					player = false;
 				} else {
 					player = true;
 				}
 				findTokenSpot(i);
-				counter++;
-				if(counter == 42) {
-					setTimeout(printResult, 500);
-				}
+				
 			} 
 	}
 }
@@ -152,32 +180,6 @@ function mouseHoverHandler (e) {
 	
 }
 
-
-function reloader () {
-	document.location.reload();
-
-}
-
-function display () {
-	if (checkResult == false) {
-		var TextCon = document.querySelector(".ResultDisplayer");
-		var Con = document.createElement("h1");
-		Con.id = "ResultText";
-		if (counter == 42) {
-			Con.textContent = "Draw!";
-		} else {
-			if (red == true) {
-				Con.textContent = "Red Player Wins!";
-			}else if (red == false) {
-				Con.textContent = "Yellow Player Wins!";
-		} 
-		TextCon.appendChild(Con);
-		checkResult = true;
-	}
-	setTimeout(reloader, 1000);
-}
-}
-
 function checkWinner () {
 	for(var i = 1; i<8; i++) {
 		for(var j = 1; j<7; j++) {
@@ -187,12 +189,18 @@ function checkWinner () {
 			if (grid[i][j].color == 1 && grid[i][j+1].color == 1 && grid[i][j+2].color == 1 && grid[i][j+3].color == 1) {
 				dropToken(grid[i][j].x, grid[i][j].y, grid[i][j].color);
 				red = true;
+				for(var a = 0; a<4; a++) {
+					drawWinningTokens(grid[i][j+a].x, grid[i][j+a].y)
+				}
 				setTimeout(display, 500);
 				
 			}
 			if (grid[i][j].color == 2 && grid[i][j+1].color == 2 && grid[i][j+2].color == 2 && grid[i][j+3].color == 2) {
 				dropToken(grid[i][j].x, grid[i][j].y, grid[i][j].color);
 				red = false;
+				for(var a = 0; a<4; a++) {
+					drawWinningTokens(grid[i][j+a].x, grid[i][j+a].y)
+				}
 				setTimeout(display, 500);
 				
 			}
@@ -202,12 +210,19 @@ function checkWinner () {
 			if (grid[i][j].color == 1 && grid[i+1][j].color == 1 && grid[i+2][j].color == 1 && grid[i+3][j].color == 1) {
 				dropToken(grid[i][j].x, grid[i][j].y, grid[i][j].color);
 				red = true;
+				for(var a = 0; a<4; a++) {
+					drawWinningTokens(grid[i+a][j].x, grid[i+a][j].y)
+				}
 				setTimeout(display, 500);
+				
 				
 			}
 			if (grid[i][j].color == 2 && grid[i+1][j].color == 2 && grid[i+2][j].color == 2 && grid[i+3][j].color == 2) {
 				dropToken(grid[i][j].x, grid[i][j].y, grid[i][j].color);
 				red = false;
+				for(var a = 0; a<4; a++) {
+					drawWinningTokens(grid[i+a][j].x, grid[i+a][j].y)
+				}
 				setTimeout(display, 500);
 				
 			}
@@ -217,12 +232,18 @@ function checkWinner () {
 			if (grid[i][j].color == 1 && grid[i+1][j+1].color == 1 && grid[i+2][j+2].color == 1 && grid[i+3][j+3].color == 1) {
 				dropToken(grid[i][j].x, grid[i][j].y, grid[i][j].color);
 				red = true;		
+				for(var a = 0; a<4; a++) {
+					drawWinningTokens(grid[i+a][j+a].x, grid[i+a][j+a].y)
+				}
 				setTimeout(display, 500);
 				
 			}
 			if (grid[i][j].color == 2 && grid[i+1][j+1].color == 2 && grid[i+2][j+2].color == 2 && grid[i+3][j+3].color == 2) {
 				dropToken(grid[i][j].x, grid[i][j].y, grid[i][j].color);	
 				red = false;			
+				for(var a = 0; a<4; a++) {
+					drawWinningTokens(grid[i+a][j+a].x, grid[i+a][j+a].y)
+				}
 				setTimeout(display, 500);
 				
 			}
@@ -231,12 +252,18 @@ function checkWinner () {
 				if (grid[i][j].color == 1 && grid[i+1][j-1].color == 1 && grid[i+2][j-2].color == 1 && grid[i+3][j-3].color == 1) {
 					dropToken(grid[i][j].x, grid[i][j].y, grid[i][j].color);
 					red = true;				
+					for(var a = 0; a<4; a++) {
+						drawWinningTokens(grid[i+a][j-a].x, grid[i+a][j-a].y)
+					}
 					setTimeout(display, 500);
 					
 				}
 				if (grid[i][j].color == 2 && grid[i+1][j-1].color == 2 && grid[i+2][j-2].color == 2 && grid[i+3][j-3].color == 2) {
 					dropToken(grid[i][j].x, grid[i][j].y, grid[i][j].color);
 					red = false;
+					for(var a = 0; a<4; a++) {
+						drawWinningTokens(grid[i+a][j-a].x, grid[i+a][j-a].y)
+					}
 					setTimeout(display, 500);
 					
 				}
